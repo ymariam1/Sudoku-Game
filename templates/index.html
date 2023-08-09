@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Puzzle</title>
+</head>
+<body>
+    <h1>Sudoku Puzzle</h1>
+    <table>
+        {% for row in puzzle %}
+            <tr>
+                {% for cell in row %}
+                    {% if cell == 0 %}
+                        <td><input type="text" value="" maxlength="1"></td>
+                    {% else %}
+                        <td>{{ cell }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    <button><a href='/'>New Puzzle</a></button>
+</body>
+</html>
