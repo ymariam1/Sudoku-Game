@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetForm = document.querySelector('form[name="reset-form"]');
     const puzzleTable = document.querySelector('table');
 
-    resetForm.addEventListener('click', async function() {
+    resetForm.addEventListener('submit', async function(Event) {
         Event.preventDefault();
         try {
             const response = await fetch('/reset', { method: 'POST' });
@@ -15,11 +15,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 for (const cell of row) {
                     const cellElement = document.createElement('td');
                     if (cell === '0') {
+                        const inputElement = document.createElement('input');
                         inputElement.type = 'number';
                         inputElement.value = '';
                         inputElement.maxLength= '1'
+                        inputElement.min = 1;
+                        inputElement.max = 9;
                         inputElement.addEventListener('input', function() {
-                            if (!/^[1-9]?@/.test(this.value)) {
+                            if (!/^[1-9]?$/.test(this.value)) {
                                 this.value = '';
                             }
                         });
