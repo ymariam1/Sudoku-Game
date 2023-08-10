@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from dokusan import generators
 import numpy as np
 app = Flask(__name__)
@@ -7,8 +7,15 @@ app = Flask(__name__)
 def generate_puzzle():
     puzzle_flat = np.array(list(str(generators.random_sudoku(avg_rank=150))))
     puzzle = puzzle_flat.reshape(9,9)
-    return puzzle
+    return puzzle.tolist()
 
+puzzle_data = generate_puzzle()
+
+@app.route('/reset', methods=['POST'])
+def reset():
+    global puzzle_data
+    puzzle_data = generate_puzzle()
+    return jsonify(puzzle_data)
 
 @app.route('/')
 def index():
@@ -16,6 +23,6 @@ def index():
     return render_template('index.html', puzzle = puzzle)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
     

@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sudoku Puzzle</title>
-</head>
-<body>
+{% extends 'layout.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
     <h1>Sudoku Puzzle</h1>
-    <table>
+    <table name="puzzle">
         {% for row in puzzle %}
             <tr>
                 {% for cell in row %}
-                    {% if cell == 0 %}
+                    {% if cell == '0' %}
                         <td><input type="text" value="" maxlength="1"></td>
                     {% else %}
                         <td>{{ cell }}</td>
@@ -20,6 +15,7 @@
             </tr>
         {% endfor %}
     </table>
-    <button><a href='/'>New Puzzle</a></button>
-</body>
-</html>
+    <form name="reset-form" method="post" action="/reset">
+        <button name="reset-button" type="submit">New Puzzle</button>
+    </form>
+{% endblock %}
