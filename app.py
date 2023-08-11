@@ -17,6 +17,16 @@ def reset():
     puzzle_data = generate_puzzle()
     return jsonify(puzzle_data)
 
+@app.route('/check', methods=['POST'])
+def Check_puzzle():
+    try:
+        puzzle_data = np.array(request.get_json())
+        return jsonify(puzzle_data.tolist())
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+
+
 @app.route('/')
 def index():
     puzzle = generate_puzzle()

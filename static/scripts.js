@@ -26,12 +26,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                 this.value = '';
                             }
                         });
-                    
                     cellElement.appendChild(inputElement);
                     }
                     else {
                         cellElement.textContent = cell;
                     }
+                    rowElement.appendChild(cellElement);
                 }
                 puzzleTable.appendChild(rowElement);
                 }
@@ -40,5 +40,42 @@ document.addEventListener('DOMContentLoaded', function() {
             catch (error) {
                 console.error('error resetting puzzle', error)
             }
+    });
+    submitForm.addEventListener('submit', async function(Event) {
+        Event.preventDefault();
+
+        const puzzleData = [];
+        const rows = document.querySelectorAll('tr');
+        for (const rowElement of rows){
+            const cells = rowElement.querySelectorAll('td')
+            const rowData = [];
+            for (const cellElement of cells) {
+                if (cellElement.children.length < 1){
+                    const inputElement = cellElement.querySelector('input');
+                    rowData.push(inputElement.value || '0');
+                }
+                else {
+                    rowData.push(cellElement.textContent);
+                }
+            }
+            puzzleData.push(rowData);
+        }
+        
+        try {
+            const response = await fetch('/collect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ data: puzzleData})
+            });
+
+            const numpyarrayData = await response.json();
+            console.log(numpyarrayData);
+        }
+        catch (error) {
+            console.error('error collecting data');
+        }
+
     });
 });
