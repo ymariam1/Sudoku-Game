@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const resetForm = document.querySelector('form[name="reset-form"]');
+    const checkForm = document.querySelector('form[name="check-form"]');
     const puzzleTable = document.querySelector('table');
 
     resetForm.addEventListener('submit', async function(Event) {
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('error resetting puzzle', error)
             }
     });
-    submitForm.addEventListener('submit', async function(Event) {
+    checkForm.addEventListener('submit', async function(Event) {
         Event.preventDefault();
 
         const puzzleData = [];
@@ -51,18 +52,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const rowData = [];
             for (const cellElement of cells) {
                 if (cellElement.children.length < 1){
-                    const inputElement = cellElement.querySelector('input');
-                    rowData.push(inputElement.value || '0');
+                    rowData.push(cellElement.textContent);
                 }
                 else {
-                    rowData.push(cellElement.textContent);
+                    const inputElement = cellElement.querySelector('input');
+                    if (inputElement.textContent === '') {
+                        rowData.push('0')
+                    }
+                    else {
+                        rowData.push(inputElement.value);
+                    }
                 }
             }
             puzzleData.push(rowData);
         }
         
         try {
-            const response = await fetch('/collect', {
+            const response = await fetch('/check', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -21,11 +21,43 @@ def reset():
 def Check_puzzle():
     try:
         puzzle_data = np.array(request.get_json())
+        for row in puzzle_data:
+            for i in range(len(row)):
+                if row[i] == '0':
+                    row[i]= 0
+                else:
+                    row[i] = int(row[i])
         return jsonify(puzzle_data.tolist())
     except Exception as e:
         return jsonify(error=str(e)), 500
 
+def checkPos(puzzle, row, col, num):
+    for i in range(9):
+        if puzzle[row][i] == num or puzzle[i][row] == num:
+            return False
+        if puzzle[3 * (row // 3) + i // 3][3 * (col // 3) + i % 3] == num:
+            return False
+    return True
 
+def check(puzzle):
+    for row in range(9):
+        for col in range(9):
+            if not checkPos(puzzle, row, col, puzzle[row][col]):
+                return False
+    return True
+    
+def solver(puzzle):
+        for row in range(9):
+            for col in range(9):
+                if puzzle[row][col] == 0:
+                    for num in range(1, 10):
+                        if checkPos(puzzle, row, col, num):
+                            puzzle[row][col] = num
+                            if solver(puzzle):
+                                return True
+                            puzzle[row][col] = 0
+                    return False
+        return True
 
 @app.route('/')
 def index():
