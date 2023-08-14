@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             puzzleData.push(rowData);
         }
+        console.log(puzzleData)
         
         try {
             const response = await fetch('/check', {
@@ -73,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ data: puzzleData})
+                body: JSON.stringify(puzzleData)
             });
 
             const numpyarrayData = await response.json();

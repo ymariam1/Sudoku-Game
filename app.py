@@ -19,17 +19,18 @@ def reset():
 
 @app.route('/check', methods=['POST'])
 def Check_puzzle():
-    try:
-        puzzle_data = np.array(request.get_json())
-        for row in puzzle_data:
-            for i in range(len(row)):
-                if row[i] == '0':
-                    row[i]= 0
-                else:
-                    row[i] = int(row[i])
-        return jsonify(puzzle_data.tolist())
-    except Exception as e:
-        return jsonify(error=str(e)), 500
+    puzzle_data = request.get_json()
+    print(puzzle_data)
+    for row in puzzle_data:
+        for i in range(len(row)):
+            if row[i] == '0':
+                row[i]= 0
+            else:
+                row[i] = int(row[i])
+    if checkp(puzzle_data) == True:
+        return jsonify(message='puzzle has beeen solved')
+    else:
+        return jsonify(message='mistake made')
 
 def checkPos(puzzle, row, col, num):
     for i in range(9):
@@ -39,7 +40,7 @@ def checkPos(puzzle, row, col, num):
             return False
     return True
 
-def check(puzzle):
+def checkp(puzzle):
     for row in range(9):
         for col in range(9):
             if not checkPos(puzzle, row, col, puzzle[row][col]):
